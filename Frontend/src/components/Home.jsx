@@ -108,7 +108,7 @@ function CategoryCard({ title, desc, href, img, cta }) {
           <h3 className="text-lg font-semibold">{title}</h3>
           <p className="mt-1 text-sm text-white/90">{desc}</p>
           <Link
-            to={href}
+            to= "/shop"
             className="mt-3 inline-flex items-center rounded-full bg-[var(--accent)] px-4 py-2 text-xs font-semibold text-white hover:bg-[var(--accent-hover)] focus:outline-none focus:ring-2 focus:ring-white"
           >
             {cta} <ArrowRight className="ml-2 h-3.5 w-3.5" />
@@ -135,10 +135,10 @@ function TrendingCard({ id, title, price, img, href, dispatch }) {
         <p className="mt-1 text-[var(--text-muted)]">PKR {price.toLocaleString()}</p>
         <div className="mt-3 flex gap-2">
           <Link
-            to={href}
+            to="/shop"
             className="flex-1 inline-flex items-center justify-center rounded-full border border-[var(--border)] px-3 py-1.5 text-sm hover:bg-[var(--tint)]"
           >
-            View
+            Go to Shop
           </Link>
           <button
             onClick={() => {
@@ -177,7 +177,7 @@ const categories = [
     desc: "From everyday essentials to statement fits.",
     cta: "Shop Men",
     href: "/category/men",
-    img: "https://images.unsplash.com/photo-1520975962293-2450f7f040ee?q=80&w=1600&auto=format&fit=crop",
+    img: "/src/assets/images/M1.jpg",
   },
   {
     slug: "women",
@@ -185,7 +185,7 @@ const categories = [
     desc: "Elegant silhouettes and modern staples.",
     cta: "Shop Women",
     href: "/category/women",
-    img: "https://images.unsplash.com/photo-1519744346363-63e0d7c38f7a?q=80&w=1600&auto=format&fit=crop",
+    img: "/src/assets/images/W1.jpg",
   },
   {
     slug: "kids",
@@ -193,7 +193,7 @@ const categories = [
     desc: "Play-ready outfits for little trendsetters.",
     cta: "Shop Kids",
     href: "/category/kids",
-    img: "https://images.unsplash.com/photo-1485546246426-74dc88dec4d9?q=80&w=1600&auto=format&fit=crop",
+    img: "/src/assets/images/C1.jpg",
   },
 ];
 
@@ -203,14 +203,14 @@ const trending = [
     title: "Oversized Cotton Tee",
     price: 1999,
     href: "/product/oversized-cotton-tee",
-    img: "https://images.unsplash.com/photo-1520976389440-e0a1110a1d95?q=80&w=1600&auto=format&fit=crop",
+    img: "/src/assets/images/M3.jpg",
   },
   {
     id: 2,
-    title: "Relaxed Denim Jacket",
+    title: "Relaxed Denim paint",
     price: 5499,
     href: "/product/relaxed-denim-jacket",
-    img: "https://images.unsplash.com/photo-1520975922323-737b0f35b2c1?q=80&w=1600&auto=format&fit=crop",
+    img: "/src/assets/images/M4.jpg",
   },
   {
     id: 3,

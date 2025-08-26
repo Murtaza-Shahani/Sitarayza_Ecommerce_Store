@@ -21,11 +21,13 @@ function ProductDetail() {
           <img
             src={product.image}
             alt={product.title}
-            className="w-1/2 h-80 object-cover"
+            className="w-1/2 h-80 object-cover rounded-2xl"
           />
           <div className="w-1/2">
             <h2 className="text-2xl font-semibold">{product.title}</h2>
             <p className="text-sm text-gray-500 mt-2">{product.description}</p>
+             <p className="text-sm text-gray-500 mt-2">{product.category}</p>
+              <p className="text-sm text-gray-500 mt-2">{product.size}</p>
             <p className="text-lg font-bold mt-4">PKR {product.price}</p>
 
             <div className="mt-6 flex gap-4">

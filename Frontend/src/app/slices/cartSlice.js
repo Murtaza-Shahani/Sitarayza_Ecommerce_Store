@@ -32,28 +32,32 @@ const cartSlice = createSlice({
       const it = state.items.find((i) => i.id === id);
       if (it) it.qty = Math.max(1, qty | 0);
     },
-    clear(state) {
+    clearCart(state) {      // ✅ renamed from clear to clearCart
       state.items = [];
     },
   },
 });
 
-export const { addItem, removeItem, increase, decrease, setQty, clear } =
+export const { addItem, removeItem, increase, decrease, setQty, clearCart } =
   cartSlice.actions;
 export default cartSlice.reducer;
 
 /* -------- Selectors -------- */
 export const selectCartItems = (s) => s.cart.items;
+
 export const selectCartCount = createSelector([selectCartItems], (items) =>
   items.reduce((sum, i) => sum + i.qty, 0)
 );
+
 export const selectSubtotal = createSelector([selectCartItems], (items) =>
   items.reduce((sum, i) => sum + i.price * i.qty, 0)
 );
+
 // Simple shipping: free ≥ 5000 else 250 (0 if empty)
 export const selectShipping = createSelector([selectSubtotal], (subtotal) =>
   subtotal === 0 ? 0 : subtotal >= 5000 ? 0 : 250
 );
+
 export const selectTotal = createSelector(
   [selectSubtotal, selectShipping],
   (subtotal, shipping) => subtotal + shipping

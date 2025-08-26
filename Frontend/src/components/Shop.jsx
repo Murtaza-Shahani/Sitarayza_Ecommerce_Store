@@ -27,34 +27,56 @@ function Shop() {
       {/* Filters Section */}
       <div className="w-1/4 p-4">
         <h2 className="text-xl font-semibold mb-4">Filters</h2>
-        <div className="mb-4">
-          <h3 className="font-medium">Category</h3>
-          <button
-            className="block w-full py-2 mt-2 text-sm text-left"
-            onClick={() => handleCategoryChange("all")}
-          >
-            All
-          </button>
-          <button
-            className="block w-full py-2 mt-2 text-sm text-left"
-            onClick={() => handleCategoryChange("men")}
-          >
-            Men
-          </button>
-          <button
-            className="block w-full py-2 mt-2 text-sm text-left"
-            onClick={() => handleCategoryChange("women")}
-          >
-            Women
-          </button>
-          <button
-            className="block w-full py-2 mt-2 text-sm text-left"
-            onClick={() => handleCategoryChange("child")}
-          >
-            Kids
-          </button>
+
+        {/* Category Card */}
+        <div className="border rounded-lg shadow-sm p-4">
+          <h3 className="font-bold text-lg mb-4">Category</h3>
+          <div className="space-y-3">
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="radio"
+                name="category"
+                checked={selectedCategory === "all"}
+                onChange={() => handleCategoryChange("all")}
+                className="h-4 w-4 text-pink-500 focus:ring-pink-500 border-pink-400"
+              />
+              <span>All</span>
+            </label>
+
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="radio"
+                name="category"
+                checked={selectedCategory === "men"}
+                onChange={() => handleCategoryChange("men")}
+                className="h-4 w-4 text-pink-500 focus:ring-pink-500 border-pink-400"
+              />
+              <span>Men</span>
+            </label>
+
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="radio"
+                name="category"
+                checked={selectedCategory === "women"}
+                onChange={() => handleCategoryChange("women")}
+                className="h-4 w-4 text-pink-500 focus:ring-pink-500 border-pink-400"
+              />
+              <span>Women</span>
+            </label>
+
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="radio"
+                name="category"
+                checked={selectedCategory === "child"}
+                onChange={() => handleCategoryChange("child")}
+                className="h-4 w-4 text-pink-500 focus:ring-pink-500 border-pink-400"
+              />
+              <span>Kids</span>
+            </label>
+          </div>
         </div>
-        {/* Additional filters like price and size can go here */}
       </div>
 
       {/* Products Section */}
