@@ -7,13 +7,14 @@ import ProductDetail from './components/ProductDetail';
 import Footer from './components/Footer';
 import CartDrawer from './features/cart/CartDrawer';
 import Checkout from './components/Checkout';
+import OrderDashboard from './components/OrderDashboard'; // <-- import dashboard
 
 function App() {
   return (
     <>
       <Navbar
         isAuthenticated={false}   // from auth state
-        isAdmin={false}           // from user role
+        isAdmin={true}           // admin can access dashboard
         onSearch={(q) => console.log("search:", q)}
       />
       <CartDrawer />
@@ -21,8 +22,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/checkout" element= {<Checkout/>} /> 
-        
+        <Route path="/checkout" element={<Checkout/>} />
+        <Route path="/dashboard" element={<OrderDashboard/>} /> {/* New dashboard route */}
       </Routes>
       <Footer />
     </>

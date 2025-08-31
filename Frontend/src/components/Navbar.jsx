@@ -1,29 +1,23 @@
 import React, { useState } from "react";
-import { NavLink, Link } from "react-router-dom"; // Import NavLink for routing
+import { NavLink, Link } from "react-router-dom";
 import { Menu, X, ShoppingCart, User, Search, ShieldCheck } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux"; // Use Redux for cart state management
-import { selectCartCount } from "@/app/slices/cartSlice"; // Import the selector for cart count
-import { openCart } from "@/app/slices/uiSlice"; // Import action to open the cart drawer
+import { useDispatch, useSelector } from "react-redux";
+import { selectCartCount } from "@/app/slices/cartSlice";
+import { openCart } from "@/app/slices/uiSlice";
 
-export default function Navbar({
-  isAuthenticated = false,
-  isAdmin = false,
-  onSearch = () => {},
-}) {
+export default function Navbar({ onSearch = () => {} }) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
 
   const dispatch = useDispatch();
-  const cartCount = useSelector(selectCartCount); // Get the cart count from Redux
+  const cartCount = useSelector(selectCartCount);
 
   const close = () => setOpen(false);
 
   const navLinkBase =
     "px-3 py-2 text-sm font-medium rounded-md transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--accent)]";
-  const navLinkActive =
-    "text-[var(--accent)] bg-[var(--tint)]"; // accent style for active
-  const navLinkIdle =
-    "text-white hover:text-blue-400"; // white by default, blue on hover
+  const navLinkActive = "text-[var(--accent)] bg-[var(--tint)]";
+  const navLinkIdle = "text-white hover:text-blue-400";
 
   const Item = ({ to, children }) => (
     <NavLink
@@ -40,7 +34,6 @@ export default function Navbar({
   return (
     <header className="sticky top-0 z-50 border-b bg-[var(--brand)] text-white border-[var(--border)]/0">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Top row */}
         <div className="flex h-16 items-center justify-between">
           {/* Left: Brand */}
           <div className="flex items-center gap-3">
@@ -66,19 +59,17 @@ export default function Navbar({
           {/* Middle: Desktop nav */}
           <nav className="hidden md:flex items-center gap-1">
             <Item to="/">Home</Item>
-            <Item to="/shop">Shop</Item> {/* Added Shop Link */}
+            <Item to="/shop">Shop</Item>
             <Item to="/categories/men">Men</Item>
             <Item to="/categories/women">Women</Item>
-            {isAdmin && (
-              <Item to="/admin">
-                <span className="inline-flex items-center gap-1">
-                  <ShieldCheck className="h-4 w-4" /> Admin
-                </span>
-              </Item>
-            )}
+            <Item to="/dashboard">
+              <span className="inline-flex items-center gap-1">
+                <ShieldCheck className="h-4 w-4" /> Dashboard
+              </span>
+            </Item>
           </nav>
 
-          {/* Right: search + actions */}
+          {/* Right: search + cart */}
           <div className="flex items-center gap-2">
             {/* Desktop search */}
             <form
@@ -103,13 +94,12 @@ export default function Navbar({
               </div>
             </form>
 
-            {/* Cart (now opens drawer via Redux) */}
+            {/* Cart */}
             <button
               onClick={() => dispatch(openCart())}
               className="relative p-2 rounded-md hover:bg-[var(--tint)] text-white focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
               aria-label="Open cart"
               title="Cart"
-              type="button"
             >
               <ShoppingCart className="h-5 w-5" />
               {cartCount > 0 && (
@@ -118,30 +108,11 @@ export default function Navbar({
                 </span>
               )}
             </button>
-
-            {/* Auth */}
-            {isAuthenticated ? (
-              <Link
-                to="/profile"
-                className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm text-white border-[var(--border)] hover:bg-[var(--tint)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
-              >
-                <User className="h-4 w-4" />
-                Profile
-              </Link>
-            ) : (
-              <Link
-                to="/login"
-                className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-3 py-1.5 text-sm text-white hover:bg-[var(--accent-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
-              >
-                <User className="h-4 w-4" />
-                Login
-              </Link>
-            )}
           </div>
         </div>
       </div>
 
-      {/* Mobile sheet */}
+      {/* Mobile Menu */}
       {open && (
         <div className="fixed inset-0 z-[60] md:hidden">
           <div
@@ -161,52 +132,12 @@ export default function Navbar({
               </button>
             </div>
 
-            {/* Mobile search */}
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                onSearch(q);
-                close();
-              }}
-              className="p-4"
-            >
-              <div className="flex items-center gap-2 rounded-xl border px-3 py-2 bg-[var(--surface)] border-[var(--border)] focus-within:ring-2 focus-within:ring-[var(--accent)]">
-                <Search className="h-4 w-4 text-[var(--text-muted)]" />
-                <input
-                  value={q}
-                  onChange={(e) => setQ(e.target.value)}
-                  placeholder="Search products…"
-                  className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--text-muted)] text-[var(--text)]"
-                />
-              </div>
-            </form>
-
             <nav className="flex flex-col gap-1 px-2">
               <Item to="/">Home</Item>
-              <Item to="/shop">Shop</Item> {/* Shop Link */}
-              {/* <Item to="/categories/men">Men</Item>
-              <Item to="/categories/women">Women</Item> */}
-              {isAdmin && <Item to="/admin">Admin</Item>}
-              <div className="h-2" />
-              {/* Keep this as a link or make it open the drawer too */}
-              <button
-                onClick={() => {
-                  close();
-                  dispatch(openCart());
-                }}
-                className="mx-2 inline-flex items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm border-[var(--border)] text-white hover:text-blue-400 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
-              >
-                <ShoppingCart className="h-4 w-4" />
-                View Cart {cartCount > 0 ? `(${cartCount})` : ""}
-              </button>
-              <Link
-                to={isAuthenticated ? "/profile" : "/login"}
-                onClick={close}
-                className="mx-2 inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-3 py-2 text-sm text-white hover:bg-[var(--accent-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
-              >
-                <User className="h-4 w-4" />
-                {isAuthenticated ? "Profile" : "Login"}
-              </Link>
+              <Item to="/shop">Shop</Item>
+              <Item to="/categories/men">Men</Item>
+              <Item to="/categories/women">Women</Item>
+              <Item to="/dashboard">Dashboard</Item>
             </nav>
           </aside>
         </div>
