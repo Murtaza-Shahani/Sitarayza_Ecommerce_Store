@@ -8,6 +8,8 @@ import Footer from './components/Footer';
 import CartDrawer from './features/cart/CartDrawer';
 import Checkout from './components/Checkout';
 import OrderDashboard from './components/OrderDashboard'; // <-- import dashboard
+import Signup from './components/Signup';
+import Login from './components/Login';
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/checkout" element={<Checkout/>} />
         <Route path="/dashboard" element={<OrderDashboard/>} /> {/* New dashboard route */}
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
       <Footer />
     </>

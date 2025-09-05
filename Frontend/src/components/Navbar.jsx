@@ -69,7 +69,7 @@ export default function Navbar({ onSearch = () => {} }) {
             </Item>
           </nav>
 
-          {/* Right: search + cart */}
+          {/* Right: search + cart + login/signup */}
           <div className="flex items-center gap-2">
             {/* Desktop search */}
             <form
@@ -108,6 +108,20 @@ export default function Navbar({ onSearch = () => {} }) {
                 </span>
               )}
             </button>
+
+            {/* Login / Signup Buttons */}
+            <Link
+              to="/login"
+              className="px-3 py-1 rounded-full bg-[var(--accent)] text-white text-sm hover:bg-[var(--accent-hover)]"
+            >
+              Login
+            </Link>
+            <Link
+              to="/signup"
+              className="px-3 py-1 rounded-full bg-[var(--tint)] text-white text-sm hover:bg-[var(--tint-hover)]"
+            >
+              Signup
+            </Link>
           </div>
         </div>
       </div>
@@ -138,6 +152,20 @@ export default function Navbar({ onSearch = () => {} }) {
               <Item to="/categories/men">Men</Item>
               <Item to="/categories/women">Women</Item>
               <Item to="/dashboard">Dashboard</Item>
+              <Link
+                to="/login"
+                onClick={close}
+                className="px-3 py-1 rounded-full bg-[var(--accent)] text-white text-sm hover:bg-[var(--accent-hover)]"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                onClick={close}
+                className="px-3 py-1 rounded-full bg-[var(--tint)] text-white text-sm hover:bg-[var(--tint-hover)]"
+              >
+                Signup
+              </Link>
             </nav>
           </aside>
         </div>

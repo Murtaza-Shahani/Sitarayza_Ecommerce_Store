@@ -4,7 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectdb from "./db.js";
 import orderRoutes from "./routes/orderRoutes.js";
-
+import authRoutes from "./routes/authRoutes.js";
 dotenv.config();
 connectdb();
 
@@ -19,5 +19,7 @@ app.get("/", (req, res) => res.send("Backend is running"));
 
 // Use order routes
 app.use("/api/orders", orderRoutes);
+// Use auth routes
+app.use("/api/auth", authRoutes);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
