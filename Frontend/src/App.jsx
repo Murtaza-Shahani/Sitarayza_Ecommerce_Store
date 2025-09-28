@@ -10,10 +10,13 @@ import Checkout from './components/Checkout';
 import OrderDashboard from './components/OrderDashboard'; // <-- import dashboard
 import Signup from './components/Signup';
 import Login from './components/Login';
+import NewsSlider from './components/NewsSlider';
+import ContactForm from './components/ContactForm';
 
 function App() {
   return (
     <>
+      {/* <NewsSlider/> */}
       <Navbar
         isAuthenticated={false}   // from auth state
         isAdmin={true}           // admin can access dashboard
@@ -28,6 +31,7 @@ function App() {
         <Route path="/dashboard" element={<OrderDashboard/>} /> {/* New dashboard route */}
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path='/contact' element ={<ContactForm/>}/>
       </Routes>
       <Footer />
     </>

@@ -4,6 +4,7 @@ import { Truck, BadgeCheck, Sparkles, RotateCcw, ArrowRight, ShoppingCart } from
 import { useDispatch } from "react-redux";
 import { addItem } from "@/app/slices/cartSlice";
 import { openCart } from "@/app/slices/uiSlice";
+import ShalwarKameezSlider from "./ShalwarKameezSlider";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -38,6 +39,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <ShalwarKameezSlider/>
 
       {/* CATEGORIES */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16">
@@ -93,7 +95,7 @@ export default function Home() {
 
 /* ---------- Subcomponents ---------- */
 
-function CategoryCard({ title, desc, href, img, cta }) {
+function CategoryCard({ title, desc, size, href, img, cta }) {
   return (
     <article className="group relative overflow-hidden rounded-2xl border bg-[var(--surface)] shadow-sm hover:shadow-md transition border-[var(--border)]">
       <div className="relative h-56">
@@ -107,6 +109,7 @@ function CategoryCard({ title, desc, href, img, cta }) {
         <div className="absolute inset-x-0 bottom-0 p-4 text-white">
           <h3 className="text-lg font-semibold">{title}</h3>
           <p className="mt-1 text-sm text-white/90">{desc}</p>
+          <p className="mt-1 text-sm text-white/90">{size}</p>
           <Link
             to= "/shop"
             className="mt-3 inline-flex items-center rounded-full bg-[var(--accent)] px-4 py-2 text-xs font-semibold text-white hover:bg-[var(--accent-hover)] focus:outline-none focus:ring-2 focus:ring-white"
@@ -119,7 +122,7 @@ function CategoryCard({ title, desc, href, img, cta }) {
   );
 }
 
-function TrendingCard({ id, title, price, img, href, dispatch }) {
+function TrendingCard({ id, title, price,size, img, href, dispatch }) {
   return (
     <article className="group rounded-2xl border bg-[var(--surface)] shadow-sm hover:shadow-md transition overflow-hidden border-[var(--border)]">
       <div className="relative aspect-[4/5]">
@@ -132,6 +135,7 @@ function TrendingCard({ id, title, price, img, href, dispatch }) {
       </div>
       <div className="p-4">
         <h3 className="line-clamp-1 font-medium text-[var(--text)]">{title}</h3>
+        <p className="line-clamp-1 font-medium text-[var(--text)]">{size}</p>
         <p className="mt-1 text-[var(--text-muted)]">PKR {price.toLocaleString()}</p>
         <div className="mt-3 flex gap-2">
           <Link
@@ -175,6 +179,7 @@ const categories = [
     slug: "men",
     title: "Men",
     desc: "From everyday essentials to statement fits.",
+    size: ["Md" ],
     cta: "Shop Men",
     href: "/category/men",
     img: "/src/assets/images/M1.jpg",
@@ -183,6 +188,7 @@ const categories = [
     slug: "women",
     title: "Women",
     desc: "Elegant silhouettes and modern staples.",
+    size: ["Lg" ],
     cta: "Shop Women",
     href: "/category/women",
     img: "/src/assets/images/W1.jpg",
@@ -191,6 +197,7 @@ const categories = [
     slug: "kids",
     title: "Kids",
     desc: "Play-ready outfits for little trendsetters.",
+    size: ["Sm" ],
     cta: "Shop Kids",
     href: "/category/kids",
     img: "/src/assets/images/C1.jpg",
@@ -202,6 +209,7 @@ const trending = [
     id: 1,
     title: "Oversized Cotton Tee",
     price: 1999,
+    size: ["Sm" ],
     href: "/product/oversized-cotton-tee",
     img: "/src/assets/images/M3.jpg",
   },
@@ -209,6 +217,7 @@ const trending = [
     id: 2,
     title: "Relaxed Denim paint",
     price: 5499,
+    size: ["Md" ],
     href: "/product/relaxed-denim-jacket",
     img: "/src/assets/images/M4.jpg",
   },
@@ -216,6 +225,7 @@ const trending = [
     id: 3,
     title: "Everyday Chinos",
     price: 3299,
+    size: ["Lg" ],
     href: "/product/everyday-chinos",
     img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1600&auto=format&fit=crop",
   },
@@ -223,6 +233,7 @@ const trending = [
     id: 4,
     title: "Minimal Sneakers",
     price: 5999,
+    size: ["Lg" ],
     href: "/product/minimal-sneakers",
     img: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1600&auto=format&fit=crop",
   },

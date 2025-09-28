@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const OrderSchema = new mongoose.Schema(
   {
     customer: {
-      name: { type: String, required: true },
+      name: { type: String},
       email: { type: String, required: true },
       phone: { type: String, required: true },
       address: { type: String, required: true },
@@ -15,7 +15,8 @@ const OrderSchema = new mongoose.Schema(
       {
         id: { type: String, required: true },
         slug: { type: String },
-        name: { type: String, required: true },
+        name: { type: String},
+        // size:{type:String},
         price: { type: Number, required: true },
         qty: { type: Number, required: true },
         image: { type: String },

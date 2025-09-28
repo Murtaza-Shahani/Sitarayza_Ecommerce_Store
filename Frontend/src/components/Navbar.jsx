@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { NavLink, Link } from "react-router-dom";
-import { Menu, X, ShoppingCart, User, Search, ShieldCheck } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+import { Menu, X, ShoppingCart, Search, ShieldCheck } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCartCount } from "@/app/slices/cartSlice";
 import { openCart } from "@/app/slices/uiSlice";
@@ -8,11 +8,35 @@ import { openCart } from "@/app/slices/uiSlice";
 export default function Navbar({ onSearch = () => {} }) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const cartCount = useSelector(selectCartCount);
 
   const close = () => setOpen(false);
+
+  // Load auth state from localStorage
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const adminFlag = localStorage.getItem("isAdmin") === "true";
+    if (token) {
+      setIsLoggedIn(true);
+      setIsAdmin(adminFlag);
+    } else {
+      setIsLoggedIn(false);
+      setIsAdmin(false);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("isAdmin");
+    setIsLoggedIn(false);
+    setIsAdmin(false);
+    navigate("/login");
+  };
 
   const navLinkBase =
     "px-3 py-2 text-sm font-medium rounded-md transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--accent)]";
@@ -60,16 +84,18 @@ export default function Navbar({ onSearch = () => {} }) {
           <nav className="hidden md:flex items-center gap-1">
             <Item to="/">Home</Item>
             <Item to="/shop">Shop</Item>
-            <Item to="/categories/men">Men</Item>
-            <Item to="/categories/women">Women</Item>
-            <Item to="/dashboard">
-              <span className="inline-flex items-center gap-1">
-                <ShieldCheck className="h-4 w-4" /> Dashboard
-              </span>
-            </Item>
+            <Item to="/shop">Men</Item>
+            <Item to="/shop">Women</Item>
+            {isLoggedIn && isAdmin && (
+              <Item to="/dashboard">
+                <span className="inline-flex items-center gap-1">
+                  <ShieldCheck className="h-4 w-4" /> Dashboard
+                </span>
+              </Item>
+            )}
           </nav>
 
-          {/* Right: search + cart + login/signup */}
+          {/* Right: search + cart + auth buttons */}
           <div className="flex items-center gap-2">
             {/* Desktop search */}
             <form
@@ -79,10 +105,10 @@ export default function Navbar({ onSearch = () => {} }) {
               }}
               className="hidden md:flex items-center"
             >
-              <label className="sr-only" htmlFor="site-search">
+              {/* <label className="sr-only" htmlFor="site-search">
                 Search products
-              </label>
-              <div className="flex items-center gap-2 rounded-xl border px-3 py-2 bg-[var(--surface)] border-[var(--border)] focus-within:ring-2 focus-within:ring-[var(--accent)]">
+              </label> */}
+              {/* <div className="flex items-center gap-2 rounded-xl border px-3 py-2 bg-[var(--surface)] border-[var(--border)] focus-within:ring-2 focus-within:ring-[var(--accent)]">
                 <Search className="h-4 w-4 text-[var(--text-muted)]" />
                 <input
                   id="site-search"
@@ -91,7 +117,7 @@ export default function Navbar({ onSearch = () => {} }) {
                   placeholder="Search products…"
                   className="w-44 lg:w-64 bg-transparent text-sm outline-none placeholder:text-[var(--text-muted)] text-[var(--text)]"
                 />
-              </div>
+              </div> */}
             </form>
 
             {/* Cart */}
@@ -109,19 +135,30 @@ export default function Navbar({ onSearch = () => {} }) {
               )}
             </button>
 
-            {/* Login / Signup Buttons */}
-            <Link
-              to="/login"
-              className="px-3 py-1 rounded-full bg-[var(--accent)] text-white text-sm hover:bg-[var(--accent-hover)]"
-            >
-              Login
-            </Link>
-            <Link
-              to="/signup"
-              className="px-3 py-1 rounded-full bg-[var(--tint)] text-white text-sm hover:bg-[var(--tint-hover)]"
-            >
-              Signup
-            </Link>
+            {/* Auth buttons */}
+            {isLoggedIn ? (
+              <button
+                onClick={handleLogout}
+                className="px-3 py-1 rounded-full bg-red-500 text-white text-sm hover:bg-red-600"
+              >
+                Logout
+              </button>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="px-3 py-1 rounded-full bg-[var(--accent)] text-white text-sm hover:bg-[var(--accent-hover)]"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className="px-3 py-1 rounded-full bg-[var(--tint)] text-white text-sm hover:bg-[var(--tint-hover)]"
+                >
+                  Signup
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -149,23 +186,38 @@ export default function Navbar({ onSearch = () => {} }) {
             <nav className="flex flex-col gap-1 px-2">
               <Item to="/">Home</Item>
               <Item to="/shop">Shop</Item>
-              <Item to="/categories/men">Men</Item>
-              <Item to="/categories/women">Women</Item>
-              <Item to="/dashboard">Dashboard</Item>
-              <Link
-                to="/login"
-                onClick={close}
-                className="px-3 py-1 rounded-full bg-[var(--accent)] text-white text-sm hover:bg-[var(--accent-hover)]"
-              >
-                Login
-              </Link>
-              <Link
-                to="/signup"
-                onClick={close}
-                className="px-3 py-1 rounded-full bg-[var(--tint)] text-white text-sm hover:bg-[var(--tint-hover)]"
-              >
-                Signup
-              </Link>
+              <Item to="/shop">Men</Item>
+              <Item to="/shop">Women</Item>
+              {isLoggedIn && isAdmin && <Item to="/dashboard">Dashboard</Item>}
+
+              {isLoggedIn ? (
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    close();
+                  }}
+                  className="px-3 py-1 mt-2 rounded-full bg-red-500 text-white text-sm hover:bg-red-600"
+                >
+                  Logout
+                </button>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    onClick={close}
+                    className="px-3 py-1 mt-2 rounded-full bg-[var(--accent)] text-white text-sm hover:bg-[var(--accent-hover)]"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/signup"
+                    onClick={close}
+                    className="px-3 py-1 mt-2 rounded-full bg-[var(--tint)] text-white text-sm hover:bg-[var(--tint-hover)]"
+                  >
+                    Signup
+                  </Link>
+                </>
+              )}
             </nav>
           </aside>
         </div>

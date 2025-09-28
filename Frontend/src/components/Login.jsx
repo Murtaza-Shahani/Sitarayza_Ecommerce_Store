@@ -9,11 +9,12 @@ export default function Login() {
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleLogin = async () => {
-    const { email, password, role } = form;
+    const { email, password } = form;  // Removed 'role' for regular users
+
     if (!email || !password) return alert("Please fill all fields");
 
-    // Prepare request body
-    const body = role === "Admin" ? { email, password, role } : { email, password };
+    // Prepare request body (no need to send role for regular users)
+    const body = form.role === "Admin" ? { email, password, role: form.role } : { email, password };
 
     try {
       const res = await axios.post("http://localhost:5000/api/auth/login", body);
@@ -32,7 +33,7 @@ export default function Login() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white border rounded-lg shadow mt-8">
+    <div className="max-w-md mx-auto p-6 bg-white border rounded-lg shadow mt-8 mb-5">
       <h2 className="text-2xl font-bold mb-4">Login</h2>
       <input
         type="email"

@@ -4,73 +4,82 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || "secret123";
 
-// Signup route
+// ===== SIGNUP =====
 router.post("/signup", async (req, res) => {
   try {
     const { name, email, password, phone } = req.body;
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser)
-      return res.status(400).json({ message: "User already exists" });
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "Please fill all required fields" });
+    }
 
+    // check if user already exists
+    const existing = await User.findOne({ email });
+    if (existing) {
+      return res.status(400).json({ message: "Email already registered" });
+    }
+
+    // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await User.create({
+    const newUser = new User({
       name,
       email,
       password: hashedPassword,
       phone,
-      role: "user", // default role
+      role: "user" // always user
     });
 
-    const token = jwt.sign({ id: newUser._id, role: "user" }, JWT_SECRET, {
-      expiresIn: "7d",
-    });
-    res.status(201).json({ token, isAdmin: false, user: newUser });
+    await newUser.save();
+    res.status(201).json({ message: "Signup successful" });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Signup failed" });
+    console.error("Signup error:", err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-// Login route
-// Login route
+// ===== LOGIN =====
 router.post("/login", async (req, res) => {
   try {
-    const { email, password, role } = req.body;
+    const { email, password } = req.body;
 
-    // 1️⃣ Hardcoded Admin check
-    if (
-      email.toLowerCase() === "starayza@gmail.com" &&
-      password === "Starayza@123" &&
-      role === "Admin"
-    ) {
-      const token = jwt.sign({ email, role: "admin" }, JWT_SECRET, { expiresIn: "7d" });
+    // --- Check hardcoded admin ---
+    if (email === "admin@gmail.com" && password === "Admin@123") {
+      const token = jwt.sign(
+        { email, role: "admin" },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
       return res.json({
         token,
         isAdmin: true,
-        user: { email, role: "admin" },
+        message: "Welcome Admin"
       });
     }
 
-    // 2️⃣ Regular user login (ignore role sent from frontend)
-    const user = await User.findOne({ email: email.toLowerCase() }); // make sure email is lowercased
-    if (!user) return res.status(404).json({ message: "User not found" });
+    // --- Otherwise check DB for normal user ---
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: "User not found" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
+    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-    // 3️⃣ Return JWT
-    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign(
+      { id: user._id, role: "user" },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
-    res.json({ token, isAdmin: user.role === "admin", user });
+    res.json({
+      token,
+      isAdmin: false,
+      message: "Welcome User"
+    });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Login failed" });
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Server error" });
   }
 });
-
 
 export default router;

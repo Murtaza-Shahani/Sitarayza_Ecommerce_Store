@@ -1,4 +1,3 @@
-// src/components/Signup.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -10,10 +9,12 @@ export default function Signup() {
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSignup = async () => {
-    const { name, email, password } = form;
+    const { name, email, password, phone } = form;
     if (!name || !email || !password) return alert("Please fill all required fields");
+
+    // Send form without role (the role will be set by default on the backend)
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/signup", form);
+      const res = await axios.post("http://localhost:5000/api/auth/signup", { name, email, password, phone });
       console.log("Signed up:", res.data);
       alert("Signup successful! Please login.");
       navigate("/login");
@@ -24,7 +25,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white border rounded-lg shadow mt-8">
+    <div className="max-w-md mx-auto p-6 bg-white border rounded-lg shadow mt-8 mb-5">
       <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
       <input
         type="text"
