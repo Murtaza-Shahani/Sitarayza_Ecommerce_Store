@@ -10,13 +10,15 @@ import Checkout from './components/Checkout';
 import OrderDashboard from './components/OrderDashboard'; // <-- import dashboard
 import Signup from './components/Signup';
 import Login from './components/Login';
-import NewsSlider from './components/NewsSlider';
+
 import ContactForm from './components/ContactForm';
+import AnnouncementBar from './components/AnnouncementBar';
 
 function App() {
   return (
     <>
-      {/* <NewsSlider/> */}
+       
+       <AnnouncementBar/>
       <Navbar
         isAuthenticated={false}   // from auth state
         isAdmin={true}           // admin can access dashboard
