@@ -1,18 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { products } from "../data/products";
 import Filter from "./Filter";
 import { useDispatch } from "react-redux";
 import { addItem } from "@/app/slices/cartSlice";
 import { Link } from "react-router-dom";
 
-function Shop() {
+function Shop({ navCategory = "all", searchQuery = "" }) {
   const dispatch = useDispatch();
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState(navCategory);
 
-  const filteredProducts =
+  // Sync local category state with prop
+  useEffect(() => {
+    setSelectedCategory(navCategory);
+  }, [navCategory]);
+
+  // Filter products by category
+  let filteredProducts =
     selectedCategory === "all"
       ? products
       : products.filter((p) => p.category === selectedCategory);
+
+  // Filter by search query
+  if (searchQuery.trim() !== "") {
+    const q = searchQuery.toLowerCase();
+    filteredProducts = filteredProducts.filter(
+      (p) =>
+        p.title.toLowerCase().includes(q) ||
+        p.description.toLowerCase().includes(q)
+    );
+  }
 
   const handleAddToCart = (product) => {
     dispatch(
@@ -65,6 +81,11 @@ function Shop() {
             </div>
           </div>
         ))}
+        {filteredProducts.length === 0 && (
+          <p className="col-span-full text-center text-gray-500">
+            No products found.
+          </p>
+        )}
       </div>
     </div>
   );
